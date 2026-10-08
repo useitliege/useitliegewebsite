@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USE-IT Liège — Free Maps for Young Travellers (1st Edition)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandPink: '#fe55f0',
+                        brandCyan: '#02daf9',
+                        brandDark: '#12131C',
+                        brandYellow: '#ffde59',
+                        bgSoft: '#f8fafc'
+                    },
+                    fontFamily: {
+                        display: ['Fredoka', 'cursive', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'pop-pink': '5px 5px 0px 0px #fe55f0',
+                        'pop-cyan': '5px 5px 0px 0px #02daf9',
+                        'pop-dark': '5px 5px 0px 0px #12131C',
+                        'pop-dark-sm': '3px 3px 0px 0px #12131C',
+                        'pop-white': '5px 5px 0px 0px #ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #12131C;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Playful dot pattern background */
+        .bg-dots {
+            background-image: radial-gradient(#02daf9 1.8px, transparent 1.8px), radial-gradient(#fe55f0 1.8px, #ffffff 1.8px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+        }
+
+        /* Diagonal playful stripes */
+        .bg-stripes {
+            background: repeating-linear-gradient(
+                -45deg,
+                rgba(2, 218, 249, 0.08),
+                rgba(2, 218, 249, 0.08) 15px,
+                rgba(254, 85, 240, 0.08) 15px,
+                rgba(254, 85, 240, 0.08) 30px
+            );
+        }
+
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        @keyframes float-reverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(8px) rotate(-2deg); }
+        }
+
+        .animate-float { animation: float-slow 4s ease-in-out infinite; }
+        .animate-float-reverse { animation: float-reverse 4.5s ease-in-out infinite; }
+
+        .sticker-pill {
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .sticker-pill:hover {
+            transform: scale(1.06) rotate(-2deg);
+        }
+        .logo-placeholder {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--white);
+        }
+
+    </style>
+</head>
+<body class="bg-dots antialiased text-brandDark selection:bg-brandPink selection:text-white flex flex-col min-h-screen">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-3 sm:top-4 z-50 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
+        <div class="bg-white border-3 sm:border-4 border-brandDark rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-pop-dark flex items-center justify-between">
+            
+            <!-- Logo area: International USE-IT Badge -->
+            <a href="#" class="flex items-center gap-2.5 sm:gap-3 group">
+                <img src="assets/useit_logo.png" alt="USE-IT Logo" class="h-10 sm:h-12 w-auto object-contain group-hover:rotate-6 transition-transform" />
+                <span class="bg-brandCyan text-brandDark font-display text-base sm:text-xl font-black tracking-wider px-1.5 sm:px-2 py-0.5 rounded-lg border-2 border-brandDark transform -rotate-2">LIÈGE</span>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-6 font-display font-bold text-base">
+                <a href="#about" class="hover:text-brandPink transition-colors">About</a>
+                <a href="#vision" class="hover:text-brandCyan transition-colors">About</a>
+                <a href="#map-production" class="hover:text-brandPink transition-colors">New Map (1st Ed.)</a>
+                <a href="#network" class="hover:text-brandCyan transition-colors">Network</a>
+                <a href="#contact" class="hover:text-brandPink transition-colors">Contact</a>
+            </nav>
+
+            <!-- Call To Action Button -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="#contact" class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-display font-bold text-xs sm:text-sm bg-brandPink text-white border-2 sm:border-3 border-brandDark shadow-pop-dark hover:bg-brandCyan hover:text-brandDark transition-all duration-200 transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-paper-plane mr-1 sm:mr-1.5"></i> Get Involved
+                </a>
+                <button id="mobile-toggle" class="md:hidden text-2xl text-brandDark p-1.5 focus:outline-none rounded-xl border-2 border-brandDark bg-white active:bg-brandCyan" aria-label="Toggle Navigation Menu">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden mt-2 bg-white border-3 border-brandDark rounded-2xl p-5 shadow-pop-dark space-y-3 font-display font-bold text-base">
+            <a href="#about" class="block py-1 text-brandDark hover:text-brandPink">About USE-IT Liège</a>
+            <a href="#vision" class="block py-1 text-brandDark hover:text-brandCyan">About USE-IT</a>
+            <a href="#map-production" class="block py-1 text-brandDark hover:text-brandPink">New Map (1st Edition)</a>
+            <a href="#network" class="block py-1 text-brandDark hover:text-brandCyan">USE-IT Europe Network</a>
+            <a href="#contact" class="block py-1 text-brandDark hover:text-brandPink">Get Involved / Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="about" class="pt-8 sm:pt-14 pb-16 sm:pb-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                <!-- Left Column Text Content -->
+                <div class="lg:col-span-7 text-center lg:text-left space-y-5 sm:space-y-6">
+                    
+                    <!-- Floating Playful Badges -->
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-2.5 sm:gap-3">
+                        <span class="sticker-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black bg-brandCyan text-brandDark border-2 border-brandDark shadow-pop-dark-sm">
+                            <i class="fa-solid fa-star"></i> 1st Edition Coming Soon
+                        </span>
+                        <span class="sticker-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black bg-brandPink text-white border-2 border-brandDark shadow-pop-dark-sm">
+                            <i class="fa-solid fa-ban"></i> 100% Non-Commercial
+                        </span>
+                        <span class="sticker-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black bg-brandYellow text-brandDark border-2 border-brandDark shadow-pop-dark-sm">
+                            <i class="fa-solid fa-fire text-brandPink"></i> La Cité Ardente
+                        </span>
+                    </div>
+
+                    <!-- Main Catchy Typography -->
+                    <h1 class="font-display text-3xl sm:text-5xl lg:text-6xl font-black text-brandDark leading-[1.15]">
+                        Free Maps. <br class="hidden sm:inline"/>
+                        Made by Locals. <br/>
+                        <span class="bg-brandPink text-white px-3 py-1 rounded-2xl border-3 sm:border-4 border-brandDark inline-block transform -rotate-1 shadow-pop-dark mt-1">
+                            For Young Travellers.
+                        </span>
+                    </h1>
+
+                    <p class="text-sm sm:text-lg font-bold text-slate-700 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        No commercial fluff. No boring tourist traps. Just the raw, honest, and beautiful realities of Liège, curated directly by the creative locals who live here.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+                        <a href="#map-production" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-display font-black text-base bg-brandCyan text-brandDark border-3 border-brandDark shadow-pop-dark hover:bg-brandPink hover:text-white transition-all transform hover:-translate-y-0.5 text-center">
+                            <i class="fa-solid fa-map-location-dot mr-2"></i> Explore 1st Edition Map
+                        </a>
+                        <a href="#contact" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-display font-black text-base bg-white text-brandDark border-3 border-brandDark shadow-pop-dark hover:bg-brandYellow transition-all transform hover:-translate-y-0.5 text-center">
+                            <i class="fa-solid fa-hand-holding-heart mr-2 text-brandPink"></i> Get Involved
+                        </a>
+                    </div>
+
+                    <!-- Quick Fun Indicators -->
+                    <div class="pt-4 grid grid-cols-3 gap-2.5 max-w-md mx-auto lg:mx-0">
+                        <div class="p-3 bg-white border-2 sm:border-3 border-brandDark rounded-2xl shadow-pop-dark-sm text-center">
+                            <div class="font-display text-xl sm:text-2xl font-black text-brandPink">1st</div>
+                            <div class="text-[10px] sm:text-xs font-bold text-slate-600">Edition 2026</div>
+                        </div>
+                        <div class="p-3 bg-white border-2 sm:border-3 border-brandDark rounded-2xl shadow-pop-dark-sm text-center">
+                            <div class="font-display text-xl sm:text-2xl font-black text-brandCyan">0 €</div>
+                            <div class="text-[10px] sm:text-xs font-bold text-slate-600">Always Free</div>
+                        </div>
+                        <div class="p-3 bg-white border-2 sm:border-3 border-brandDark rounded-2xl shadow-pop-dark-sm text-center">
+                            <div class="font-display text-xl sm:text-2xl font-black text-brandDark">40+</div>
+                            <div class="text-[10px] sm:text-xs font-bold text-slate-600">Euro Network</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Visual Hero Image -->
+                <div class="lg:col-span-5 relative mt-6 lg:mt-0">
+                    
+
+                    <!-- Floating Sticker 2 -->
+                    <div class="absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-6 z-20 bg-brandPink text-white border-3 border-brandDark px-3.5 py-1.5 rounded-2xl shadow-pop-dark font-display font-black text-xs sm:text-sm animate-float-reverse">
+                        📍 374 Stairs to Climax
+                    </div>
+
+                    <!-- Hero Image -->
+                    <img src="assets/hero.jpeg" alt="USE-IT Liège — free local maps for young travellers" class="w-full h-auto object-cover border-3 sm:border-4 border-brandDark rounded-3xl shadow-pop-dark" />
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="vision" class="py-16 sm:py-20 bg-bgSoft border-y-3 sm:border-y-4 border-brandDark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
+                <h2 class="font-display text-2xl sm:text-4xl lg:text-5xl font-black text-brandDark leading-tight">
+                    What is <span class="bg-brandYellow text-brandDark px-2.5 py-0.5 rounded-xl border-2 sm:border-3 border-brandDark">USE-IT?</span>
+                </h2>
+                <p class="text-slate-700 font-bold text-sm sm:text-base leading-relaxed pt-2">
+                    USE-IT makes free city maps for young travellers, made by locals. No ads, no tourist traps, just honest tips on where to eat, drink, and explore like someone who lives here.
+                </p>
+            </div>
+
+            <!-- 3 Core Pillars -->
+            <div class="grid sm:grid-cols-3 gap-6">
+                
+                <div class="bg-white border-3 sm:border-4 border-brandDark rounded-3xl p-6 shadow-pop-dark hover:-translate-y-1 transition-transform flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-brandPink text-white rounded-2xl border-3 border-brandDark flex items-center justify-center font-display font-black text-xl mb-4 shadow-pop-dark-sm">
+                            🏷️
+                        </div>
+                        <h3 class="font-display font-black text-xl text-brandDark mb-2">100% Non-Commercial</h3>
+                        <p class="text-xs sm:text-sm font-bold text-slate-600 leading-relaxed">
+                            Nobody can pay to be on a USE-IT map. No ads, no sponsored spots, and no commercial traps. Just raw, honest picks.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t-2 border-dashed border-slate-200">
+                        <span class="text-[11px] font-black text-brandPink uppercase">Zero Advertising</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border-3 sm:border-4 border-brandDark rounded-3xl p-6 shadow-pop-dark hover:-translate-y-1 transition-transform flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-brandCyan text-brandDark rounded-2xl border-3 border-brandDark flex items-center justify-center font-display font-black text-xl mb-4 shadow-pop-dark-sm">
+                            👥
+                        </div>
+                        <h3 class="font-display font-black text-xl text-brandDark mb-2">Made by Local Youth</h3>
+                        <p class="text-xs sm:text-sm font-bold text-slate-600 leading-relaxed">
+                            Created by young residents, students, and artists who actually live in Liège and know where the real culture happens.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t-2 border-dashed border-slate-200">
+                        <span class="text-[11px] font-black text-brandDark uppercase">Local Youth Curation</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border-3 sm:border-4 border-brandDark rounded-3xl p-6 shadow-pop-dark hover:-translate-y-1 transition-transform flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-brandYellow text-brandDark rounded-2xl border-3 border-brandDark flex items-center justify-center font-display font-black text-xl mb-4 shadow-pop-dark-sm">
+                            🗺️
+                        </div>
+                        <h3 class="font-display font-black text-xl text-brandDark mb-2">Honest & Unfiltered</h3>
+                        <p class="text-xs sm:text-sm font-bold text-slate-600 leading-relaxed">
+                            Real advice on neighborhood vibes, safety, budget eats, subcultures, and how to experience the city like a friend.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t-2 border-dashed border-slate-200">
+                        <span class="text-[11px] font-black text-brandCyan uppercase">True Local Stories</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Map in Production Section (1st Edition) -->
+    <section id="map-production" class="py-16 sm:py-20 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                <span class="bg-brandPink text-white font-display font-black text-xs sm:text-sm px-4 py-1 rounded-full border-2 border-brandDark inline-block shadow-pop-dark-sm">
+                    🚀 Fresh Off The Press
+                </span>
+                <h2 class="font-display text-3xl sm:text-5xl font-black text-brandDark">
+                    Map in Production — <span class="bg-brandCyan text-brandDark px-3 py-0.5 rounded-xl border-3 border-brandDark">1st Edition</span>
+                </h2>
+                <p class="text-slate-700 font-bold text-sm sm:text-base">
+                    The very first official USE-IT Liège paper map is being crafted right now by local mappers and illustrators!
+                </p>
+            </div>
+
+            <!-- Main Feature Card for 1st Edition -->
+            <div class="bg-white border-3 sm:border-4 border-brandDark rounded-3xl p-6 sm:p-10 shadow-pop-dark relative">
+                
+                <div class="grid lg:grid-cols-12 gap-8 items-center">
+                    
+                    <div class="lg:col-span-7 space-y-5">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="bg-brandYellow text-brandDark border-2 border-brandDark font-display font-black text-xs px-3 py-1 rounded-lg">
+                                Paper Map 01 • Liège
+                            </span>
+                            <span class="bg-brandCyan text-brandDark border-2 border-brandDark font-display font-black text-xs px-3 py-1 rounded-lg flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-brandPink animate-ping"></span> Content & Community Phase
+                            </span>
+                        </div>
+
+                        <h3 class="font-display text-2xl sm:text-4xl font-black text-brandDark">
+                            What We're Uncovering in Liège
+                        </h3>
+
+                        <p class="text-xs sm:text-sm font-bold text-slate-600 leading-relaxed">
+                            From the striking modern architecture of Guillemins station to the cozy taverns of Le Carré and the bohemian streets of Outremeuse, our team is selecting the finest local secrets for young adventurers:
+                        </p>
+
+                        <!-- Feature Checklist -->
+                        <div class="grid sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-brandDark">
+                            <div class="p-3 bg-bgSoft border-2 border-brandDark rounded-xl flex items-center gap-2">
+                                <span class="text-brandPink"><i class="fa-solid fa-mug-hot"></i></span> Indie Coffee & Cheap Eats
+                            </div>
+                            <div class="p-3 bg-bgSoft border-2 border-brandDark rounded-xl flex items-center gap-2">
+                                <span class="text-brandCyan"><i class="fa-solid fa-cocktail"></i></span> Peket & Nightlife Hideouts
+                            </div>
+                            <div class="p-3 bg-bgSoft border-2 border-brandDark rounded-xl flex items-center gap-2">
+                                <span class="text-brandPink"><i class="fa-solid fa-palette"></i></span> Outremeuse Street Art
+                            </div>
+                            <div class="p-3 bg-bgSoft border-2 border-brandDark rounded-xl flex items-center gap-2">
+                                <span class="text-brandCyan"><i class="fa-solid fa-tree"></i></span> Sunset Views & River Banks
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <a href="#contact" class="inline-block px-6 py-3 rounded-2xl font-display font-black text-sm bg-brandPink text-white border-3 border-brandDark shadow-pop-dark hover:bg-brandCyan hover:text-brandDark transition-all transform hover:-translate-y-0.5">
+                                <i class="fa-solid fa-bullhorn mr-1.5"></i> Suggest a Spot or Join the Team
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Visual Timeline / Progress Column -->
+                    <div class="lg:col-span-5 bg-bgSoft border-3 border-brandDark rounded-2xl p-6 space-y-4">
+                        <h4 class="font-display font-black text-base text-brandDark border-b-2 border-dashed border-brandDark pb-2 flex items-center justify-between">
+                            <span>Map Creation Progress</span>
+                            <span class="text-brandPink text-xs">2026 Edition</span>
+                        </h4>
+
+                        <!-- Step 1 -->
+                        <div class="flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-brandCyan border-2 border-brandDark flex items-center justify-center font-display font-black text-xs shrink-0 mt-0.5">
+                                ✓
+                            </div>
+                            <div>
+                                <h5 class="font-display font-bold text-xs text-brandDark">1. Research & Youth Surveys</h5>
+                                <p class="text-[11px] text-slate-600 font-medium">Gathering non-commercial recommendations across Liège.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-brandPink text-white border-2 border-brandDark flex items-center justify-center font-display font-black text-xs shrink-0 mt-0.5">
+                                2
+                            </div>
+                            <div>
+                                <h5 class="font-display font-bold text-xs text-brandDark">2. Writing & Illustration (Active)</h5>
+                                <p class="text-[11px] text-slate-600 font-medium">Drafting original artwork, texts, and quirky local tips.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex items-start gap-3 opacity-60">
+                            <div class="w-7 h-7 rounded-full bg-white border-2 border-brandDark flex items-center justify-center font-display font-black text-xs shrink-0 mt-0.5">
+                                3
+                            </div>
+                            <div>
+                                <h5 class="font-display font-bold text-xs text-brandDark">3. Free Physical Distribution</h5>
+                                <p class="text-[11px] text-slate-600 font-medium">Hitting hostelling, tourism, and cultural desks across Europe.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-brandYellow border-2 border-brandDark rounded-xl text-[11px] font-bold text-brandDark">
+                            💡 Want to stock paper maps at your hostel or venue in Liège? Drop us a note below!
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Part of Something Bigger Section -->
+    <section id="network" class="py-16 sm:py-20 bg-brandPink border-y-3 sm:border-y-4 border-brandDark text-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 sm:space-y-8">
+            
+            <div class="inline-block bg-white text-brandDark font-display font-black text-xs sm:text-sm px-4 py-1.5 rounded-full border-3 border-brandDark shadow-pop-dark">
+                🇪🇺 International Movement
+            </div>
+
+            <h2 class="font-display text-3xl sm:text-5xl lg:text-6xl font-black leading-tight">
+                Part of <span class="bg-brandCyan text-brandDark px-3 sm:px-4 py-1 rounded-2xl border-3 sm:border-4 border-brandDark inline-block transform -rotate-1">USE-IT Europe</span>
+            </h2>
+
+            <p class="max-w-2xl mx-auto font-bold text-base sm:text-lg text-white/95 leading-relaxed">
+                USE-IT Liège is proud to join a Europe-wide network of over 40 cities producing non-commercial, locally made city maps for young travellers since 2005.
+            </p>
+
+            <!-- Stats Ticker / Counter Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto pt-2">
+                <div class="p-4 sm:p-6 bg-white text-brandDark border-3 sm:border-4 border-brandDark rounded-2xl sm:rounded-3xl shadow-pop-dark">
+                    <div class="font-display text-3xl sm:text-4xl font-black text-brandPink">40+</div>
+                    <div class="font-bold text-[10px] sm:text-xs uppercase tracking-wider text-slate-600 mt-1">European Cities</div>
+                </div>
+                <div class="p-4 sm:p-6 bg-white text-brandDark border-3 sm:border-4 border-brandDark rounded-2xl sm:rounded-3xl shadow-pop-dark">
+                    <div class="font-display text-3xl sm:text-4xl font-black text-brandCyan">20+</div>
+                    <div class="font-bold text-[10px] sm:text-xs uppercase tracking-wider text-slate-600 mt-1">Years Active</div>
+                </div>
+                <div class="p-4 sm:p-6 bg-white text-brandDark border-3 sm:border-4 border-brandDark rounded-2xl sm:rounded-3xl shadow-pop-dark">
+                    <div class="font-display text-3xl sm:text-4xl font-black text-brandYellow">2M+</div>
+                    <div class="font-bold text-[10px] sm:text-xs uppercase tracking-wider text-slate-600 mt-1">Maps Printed</div>
+                </div>
+                <div class="p-4 sm:p-6 bg-white text-brandDark border-3 sm:border-4 border-brandDark rounded-2xl sm:rounded-3xl shadow-pop-dark">
+                    <div class="font-display text-3xl sm:text-4xl font-black text-brandDark">0 €</div>
+                    <div class="font-bold text-[10px] sm:text-xs uppercase tracking-wider text-slate-600 mt-1">Always Free</div>
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <a href="https://use-it.uk" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl font-display font-black text-sm sm:text-base bg-white text-brandDark border-3 border-brandDark shadow-pop-dark hover:bg-brandYellow transition-all transform hover:-translate-y-0.5">
+                    <span>Explore Sister European City Maps</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Join The Movement / Contact Section -->
+    <section id="contact" class="py-16 sm:py-20 bg-bgSoft border-t-3 sm:border-t-4 border-brandDark">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="bg-white border-3 sm:border-4 border-brandDark rounded-3xl p-6 sm:p-10 shadow-pop-dark relative">
+                <div class="text-center space-y-2.5 mb-8">
+                    <span class="bg-brandPink text-white font-display font-black text-xs px-3.5 py-1 rounded-full border-2 border-brandDark shadow-pop-dark-sm">
+                        Join The Movement
+                    </span>
+                    <h2 class="font-display text-2xl sm:text-4xl font-black text-brandDark">
+                        Get Involved with USE-IT Liège
+                    </h2>
+                    <p class="text-slate-600 font-bold text-xs sm:text-sm max-w-xl mx-auto">
+                        Whether you want to suggest local spots, volunteer as a youth mapper, or stock paper maps at your hostel/venue in Liège, send us a message!
+                    </p>
+                </div>
+
+                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-4">
+                    <input type="hidden" name="access_key" value="85986020-2e5e-4d84-9a29-e95a4146f251">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-display font-bold text-xs uppercase text-brandDark mb-1">Your Name</label>
+                            <input type="text" name="name" required placeholder="Alex Smith" class="w-full px-4 py-3 rounded-xl bg-bgSoft border-2 sm:border-3 border-brandDark font-bold text-sm text-brandDark focus:outline-none focus:bg-white transition-colors">
+                        </div>
+                        <div>
+                            <label class="block font-display font-bold text-xs uppercase text-brandDark mb-1">Your Email</label>
+                            <input type="email" name="email" required placeholder="alex@example.com" class="w-full px-4 py-3 rounded-xl bg-bgSoft border-2 sm:border-3 border-brandDark font-bold text-sm text-brandDark focus:outline-none focus:bg-white transition-colors">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-display font-bold text-xs uppercase text-brandDark mb-1">I want to...</label>
+                        <select name="subject" class="w-full px-4 py-3 rounded-xl bg-bgSoft border-2 sm:border-3 border-brandDark font-bold text-sm text-brandDark focus:outline-none focus:bg-white transition-colors">
+                            <option value="stock">Stock paper maps at my hostel / cafe / venue</option>
+                            <option value="volunteer">Volunteer as a local mapper or artist</option>
+                            <option value="spot">Suggest a secret spot for the 1st Edition</option>
+                            <option value="press">Press or general inquiry</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-display font-bold text-xs uppercase text-brandDark mb-1">Message</label>
+                        <textarea name="message" rows="4" required placeholder="Tell us about your idea or venue..." class="w-full px-4 py-3 rounded-xl bg-bgSoft border-2 sm:border-3 border-brandDark font-bold text-sm text-brandDark focus:outline-none focus:bg-white transition-colors resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-2xl font-display font-black text-base sm:text-lg bg-brandCyan text-brandDark border-3 border-brandDark shadow-pop-dark hover:bg-brandPink hover:text-white transition-all transform hover:-translate-y-0.5">
+                        Send Message 🚀
+                    </button>
+                </form>
+
+                <!-- Feedback Toast / Confirmation Box -->
+                <div id="contact-success" class="hidden text-center py-8 space-y-3">
+                    <div class="w-16 h-16 bg-brandCyan border-3 border-brandDark rounded-full mx-auto flex items-center justify-center text-2xl font-black shadow-pop-dark-sm">
+                        🎉
+                    </div>
+                    <h3 class="font-display font-black text-2xl text-brandDark">High Five!</h3>
+                    <p class="font-bold text-slate-600 text-sm">Thanks for reaching out to USE-IT Liège. We'll get back to you super soon!</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Section with Custom USE-IT Liège Badge -->
+    <footer class="bg-white border-t-3 sm:border-t-4 border-brandDark pt-12 pb-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-10 border-b-3 border-dashed border-brandDark">
+                
+                <!-- Footer Brand Column featuring USE-IT Liège Custom Emblem -->
+                <div class="md:col-span-6 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <!-- Dedicated USE-IT Liège Custom Badge -->
+                        <div class="w-14 h-14 bg-white border-3 border-brandDark rounded-2xl flex items-center justify-center overflow-hidden p-1.5 shadow-pop-dark transform -rotate-2">
+                            <img src="assets/liege_logo.jpg" alt="USE-IT Liège logo" class="w-full h-full object-contain" />
+                        </div>
+                        <div>
+                            <span class="font-display text-xl sm:text-2xl font-black text-brandDark">USE-IT <span class="bg-brandCyan px-2 py-0.5 rounded-lg border-2 border-brandDark">LIÈGE</span></span>
+                            <p class="text-[11px] font-bold text-brandPink uppercase tracking-wider">Belgium • La Cité Ardente</p>
+                        </div>
+                    </div>
+                    <p class="text-xs font-bold text-slate-600 max-w-md leading-relaxed">
+                        Published by <span class="text-brandDark">Oufteam 4000</span>. Created by young locals for young travellers across Europe.
+                    </p>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="md:col-span-3 space-y-2">
+                    <h4 class="font-display font-black text-xs text-brandDark uppercase tracking-wider">Navigation</h4>
+                    <ul class="space-y-1.5 text-xs font-bold text-slate-600">
+                        <li><a href="#about" class="hover:text-brandPink">About USE-IT Liège</a></li>
+                        <li><a href="#vision" class="hover:text-brandCyan">About USE-IT</a></li>
+                        <li><a href="#map-production" class="hover:text-brandPink">New Map (1st Edition)</a></li>
+                        <li><a href="#network" class="hover:text-brandCyan">USE-IT Europe Network</a></li>
+                        <li><a href="#contact" class="hover:text-brandPink">Contact & Get Involved</a></li>
+                    </ul>
+                </div>
+
+                <!-- Socials & Address -->
+                <div class="md:col-span-3 space-y-3">
+                    <h4 class="font-display font-black text-xs text-brandDark uppercase tracking-wider">Connect</h4>
+                    <div class="flex gap-2.5">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 bg-brandPink text-white border-2 border-brandDark rounded-xl flex items-center justify-center font-bold shadow-pop-dark-sm hover:translate-y-0.5 transition-transform" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 bg-brandCyan text-brandDark border-2 border-brandDark rounded-xl flex items-center justify-center font-bold shadow-pop-dark-sm hover:translate-y-0.5 transition-transform" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook text-base"></i>
+                        </a>
+                        <a href="https://use-it.uk" target="_blank" rel="noopener noreferrer" class="w-9 h-9 bg-brandYellow text-brandDark border-2 border-brandDark rounded-xl flex items-center justify-center font-bold shadow-pop-dark-sm hover:translate-y-0.5 transition-transform" aria-label="Global Network Site">
+                            <i class="fa-solid fa-globe text-base"></i>
+                        </a>
+                    </div>
+                    <p class="text-[11px] font-bold text-slate-500 pt-1">
+                        Contact Address:<br>
+                        Rue Saint Gilles 190, 4000 Liège, Belgium
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row justify-between items-center text-[11px] font-bold text-slate-500 gap-2">
+                <p>© 2026 Oufteam 4000. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        // Mobile Navigation Toggle Logic
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking menu links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Contact Form Submission via Web3Forms (AJAX so we can show the success box)
+        const contactForm = document.getElementById('contact-form');
+        const contactSuccess = document.getElementById('contact-success');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Sending... ⏳';
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' },
+                    body: new FormData(contactForm)
+                });
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    contactForm.classList.add('hidden');
+                    contactSuccess.classList.remove('hidden');
+                    contactForm.reset();
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                    alert(result.message || 'Something went wrong. Please try again.');
+                }
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+                alert('Network error. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
